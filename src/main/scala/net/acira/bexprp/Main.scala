@@ -7,6 +7,7 @@ object Main {
 		val v = exp.allVariables
 		for (r <- TruthTable.on(v.toList)) { println(r) }
 		println
+		"(a and not b) -> (b <- c) or a".prettyPrint
 	}
 
 }

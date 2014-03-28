@@ -2,10 +2,9 @@ package net.acira
 
 import net.acira.bexprp.core.{Expression, VariableLiteral, BooleanExpressionParser, Literal}
 import scala.reflect.ClassTag
+import java.io.PrintStream
 
 package object bexprp {
-
-	implicit def strToLiteral(self: String) = VariableLiteral(self)
 
 	implicit class BexprpString(self: String) {
 
@@ -35,6 +34,9 @@ package object bexprp {
 				println(0 until unboundVariables.size map { pos: Int => (x & (1 << pos)) != 0 })
 			})
 		}
+
+		def prettyPrint = prettyPrint(Console.out)
+		def prettyPrint(on: PrintStream) = on.println(expression.get.prettyPrint)
 
 	}
 
