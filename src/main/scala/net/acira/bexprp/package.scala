@@ -3,6 +3,7 @@ package net.acira
 import net.acira.bexprp.core.{Expression, VariableLiteral, BooleanExpressionParser, Literal}
 import scala.reflect.ClassTag
 import java.io.PrintStream
+import net.acira.bexprp.visitors.PrettyPrintVisitor
 
 package object bexprp {
 
@@ -35,8 +36,8 @@ package object bexprp {
 			})
 		}
 
-		def prettyPrint = prettyPrint(Console.out)
-		def prettyPrint(on: PrintStream) = on.println(expression.get.prettyPrint)
+		def prettyPrint: Unit = prettyPrint(Console.out)
+		def prettyPrint(on: PrintStream): Unit = on.println(expression.get.accept(new PrettyPrintVisitor()))
 
 	}
 
