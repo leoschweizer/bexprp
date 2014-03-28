@@ -2,19 +2,20 @@ package net.acira.bexprp.visitors
 
 import net.acira.bexprp.core._
 
-abstract class Visitor[R] {
+trait Visitor[R] {
 
-	protected def defaultUnaryOperation: (UnaryOperation => R) = ???
-	protected def defaultBinaryOperation: (BinaryOperation => R) = ???
-	protected def defaultLiteralOperation: (Literal => R) = ???
+	def visit(expression: UnaryOperation) = this
+	def visit(expression: Not) = this
+	def visit(expression: BinaryOperation) = this
+	def visit(expression: And) = this
+	def visit(expression: Or) = this
+	def visit(expression: Implication) = this
+	def visit(expression: LeftImplication) = this
+	def visit(expression: Equivalence) = this
+	def visit(expression: Literal) = this
+	def visit(expression: VariableLiteral) = this
+	def visit(expression: ConstantLiteral) = this
 
-	def visit(expression: Not): R = defaultUnaryOperation(expression)
-	def visit(expression: And): R = defaultBinaryOperation(expression)
-	def visit(expression: Or): R = defaultBinaryOperation(expression)
-	def visit(expression: Implication): R = defaultBinaryOperation(expression)
-	def visit(expression: LeftImplication): R = defaultBinaryOperation(expression)
-	def visit(expression: Equivalence): R = defaultBinaryOperation(expression)
-	def visit(expression: VariableLiteral): R = defaultLiteralOperation(expression)
-	def visit(expression: ConstantLiteral): R = defaultLiteralOperation(expression)
+	def result: R
 
 }

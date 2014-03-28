@@ -1,13 +1,16 @@
 package net.acira.bexprp.visitors
 
-import net.acira.bexprp.core._
+import net.acira.bexprp.core.VariableLiteral
 
 class UnboundVariableFinder extends Visitor[Set[VariableLiteral]] {
 
-	override def defaultUnaryOperation = (expression: UnaryOperation) => expression.operand.accept(this)
-	override def defaultBinaryOperation = (expression: BinaryOperation) => expression.left.accept(this) ++ expression.right.accept(this)
+	var unboundVariables = Set.empty[VariableLiteral]
 
-	override def visit(expression: VariableLiteral) = if (!expression.isBound) Set(expression) else Set.empty
-	override def visit(expression: ConstantLiteral) = Set.empty
+	override def visit(expression: VariableLiteral) = {
+		if (!expression.isBound) unboundVariables += expression
+		this
+	}
+
+	override def result: Set[VariableLiteral] = unboundVariables
 
 }
