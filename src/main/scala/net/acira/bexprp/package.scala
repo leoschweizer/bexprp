@@ -14,7 +14,7 @@ package object bexprp {
 		def evaluate[X: ClassTag](literalValues: (Literal, Boolean)*): Boolean = {
 			val lv = literalValues.toMap
 			val expression = BooleanExpressionParser.parse(self).get
-			val literals = expression.allVariables
+			val literals = expression.unboundVariables
 			literals.foreach(literal => {
 				if (lv.contains(literal)) literal.bind(lv(literal))
 			})
@@ -27,7 +27,7 @@ package object bexprp {
 
 		def truthTable = {
 			val exp = expression.get
-			val (boundVariables, unboundVariables) = exp.allVariables.partition(_.isBound)
+			val unboundVariables = exp.unboundVariables
 			val sortedUnboundVariables = unboundVariables.toList.sortBy(_.literal)
 			val v = List(true, false)
 			val truthValues = v.combinations(sortedUnboundVariables.size)

@@ -1,7 +1,6 @@
 package net.acira.bexprp.visitors
 
 import net.acira.bexprp.core._
-import scala.collection.mutable.ListBuffer
 
 class PrettyPrintVisitor extends Visitor[String] {
 

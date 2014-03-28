@@ -2,7 +2,7 @@ package net.acira.bexprp.visitors
 
 import net.acira.bexprp.core._
 
-trait Visitor[R] {
+abstract class Visitor[R] {
 
 	def visit(expression: Not): R
 	def visit(expression: And): R
