@@ -5,7 +5,7 @@ import net.acira.bexprp.visitors.{UnboundVariableFinder, Visitor}
 
 trait Expression {
 	def evaluate: Boolean
-	def unboundVariables: Set[VariableLiteral] = this.accept(new UnboundVariableFinder)
+	def unboundVariables: Set[VariableLiteral] = this.accept(new UnboundVariableFinder())
 	def accept[R](visitor: Visitor[R]): R
 }
 
