@@ -50,9 +50,9 @@ object BooleanExpressionParser extends StandardTokenParsers {
 	def primary: Parser[Expression] = "(" ~> expression <~ ")" | literal
 
 	def literal: Parser[Expression] = ident ^^ {
-		case "true" => ConstantLiteral(true)
-		case "false" => ConstantLiteral(false)
-		case n => VariableLiteral(n)
+		case "true" => Constant(true)
+		case "false" => Constant(false)
+		case n => Variable(n)
 	}
 
 	def parse(s: String) = expression(new lexical.Scanner(s)) match {

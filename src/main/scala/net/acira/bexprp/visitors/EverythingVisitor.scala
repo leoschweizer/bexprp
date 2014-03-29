@@ -13,8 +13,8 @@ class EverythingVisitor extends Visitor[Unit] {
 	override def visitLeftImplication(expression: LeftImplication) = { println("5 visited: " + expression); this }
 	override def visitEquivalence(expression: Equivalence) = { println("6 visited: " + expression); this }
 	override def visitLiteral(expression: Literal) = { println("21 visited: " + expression); this }
-	override def visitVariable(expression: VariableLiteral) = { println("7 visited: " + expression); this }
-	override def visitConstant(expression: ConstantLiteral) = { println("8 visited: " + expression); this }
+	override def visitVariable(expression: Variable) = { println("7 visited: " + expression); this }
+	override def visitConstant(expression: Constant) = { println("8 visited: " + expression); this }
 
 	def result: Unit = {}
 

@@ -8,21 +8,19 @@ trait Expression {
 	def accept[R](visitor: Visitor[R]): Visitor[R]
 
 	def accept[R](visitor: TraversingVisitor[R]): R = visitor.visit(this)
-	def unboundVariables: Set[VariableLiteral] = this.accept(new UnboundVariableFinder()).result
+	def unboundVariables: Set[Variable] = this.accept(new UnboundVariableFinder()).result
 }
 
 trait Literal extends Expression {
-
 	override def accept[R](visitor: Visitor[R]) = visitor.visit(this)
-
 }
 
-case class ConstantLiteral(value: Boolean) extends Literal {
+case class Constant(value: Boolean) extends Literal {
 	override def evaluate: Boolean = value
 	override def operationSymbol = value.toString
 }
 
-case class VariableLiteral(literal: String) extends Literal {
+case class Variable(literal: String) extends Literal {
 	var boundValue: Option[Boolean] = None
 	override def evaluate: Boolean = boundValue.get
 	override def operationSymbol = boundValue.map(_.toString).getOrElse(literal)

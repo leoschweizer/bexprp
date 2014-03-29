@@ -1,6 +1,6 @@
 package net.acira
 
-import net.acira.bexprp.core.{Expression, VariableLiteral, BooleanExpressionParser, Literal}
+import net.acira.bexprp.core.{Expression, Variable, BooleanExpressionParser, Literal}
 import scala.reflect.ClassTag
 import java.io.PrintStream
 import net.acira.bexprp.visitors.PrettyPrinter
@@ -9,7 +9,7 @@ package object bexprp {
 
 	implicit class BexprpString(self: String) {
 
-		def evaluate(literalValues: (String, Boolean)*): Boolean = evaluate(literalValues.map(x => VariableLiteral(x._1) -> x._2):_*)
+		def evaluate(literalValues: (String, Boolean)*): Boolean = evaluate(literalValues.map(x => Variable(x._1) -> x._2):_*)
 
 		def evaluate[X: ClassTag](literalValues: (Literal, Boolean)*): Boolean = {
 			val lv = literalValues.toMap

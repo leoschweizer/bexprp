@@ -1,16 +1,16 @@
 package net.acira.bexprp.visitors
 
-import net.acira.bexprp.core.VariableLiteral
+import net.acira.bexprp.core.Variable
 
-class UnboundVariableFinder extends Visitor[Set[VariableLiteral]] {
+class UnboundVariableFinder extends Visitor[Set[Variable]] {
 
-	var unboundVariables = Set.empty[VariableLiteral]
+	var unboundVariables = Set.empty[Variable]
 
-	override def visitVariable(expression: VariableLiteral) = {
+	override def visitVariable(expression: Variable) = {
 		if (!expression.isBound) unboundVariables += expression
 		this
 	}
 
-	override def result: Set[VariableLiteral] = unboundVariables
+	override def result: Set[Variable] = unboundVariables
 
 }
