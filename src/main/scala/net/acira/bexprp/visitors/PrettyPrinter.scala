@@ -1,6 +1,6 @@
 package net.acira.bexprp.visitors
 
-class PrettyPrintVisitor extends TraversingVisitor[String] {
+class PrettyPrinter extends TraversingVisitor[String] {
 
 	override def defaultUnaryOperation = (expression) => s"${expression.operationSymbol}(${expression.operand.accept(this)})"
 

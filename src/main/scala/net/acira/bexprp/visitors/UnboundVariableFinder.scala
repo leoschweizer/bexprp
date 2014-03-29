@@ -6,7 +6,7 @@ class UnboundVariableFinder extends Visitor[Set[VariableLiteral]] {
 
 	var unboundVariables = Set.empty[VariableLiteral]
 
-	override def visit(expression: VariableLiteral) = {
+	override def visitVariable(expression: VariableLiteral) = {
 		if (!expression.isBound) unboundVariables += expression
 		this
 	}
