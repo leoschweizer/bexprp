@@ -6,7 +6,7 @@ object Main {
 		val e = "(not a -> b) or c"
 		e.prettyPrint
 		val b = e.bind("a" -> true, "b" -> false)
-		b.prettyPrint
+		b.get.prettyPrint
 		println
 	}
 

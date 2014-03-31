@@ -1,6 +1,7 @@
 package net.acira.bexprp.core
 
 import scala.util.parsing.combinator.syntactical.StandardTokenParsers
+import scala.util.Try
 
 object BooleanExpressionParser extends StandardTokenParsers {
 
@@ -55,10 +56,9 @@ object BooleanExpressionParser extends StandardTokenParsers {
 		case n => FreeVariable(n)
 	}
 
-	def parse(s: String) = expression(new lexical.Scanner(s)) match {
-		case Success(p, _) => Option(p)
-		case Failure(msg, _) => println(msg); None
-		case Error(msg, _) => println(msg); None
+	def parse(s: String): Try[Expression] = expression(new lexical.Scanner(s)) match {
+		case Success(p, _) => scala.util.Success(p)
+		case NoSuccess(msg, _) => scala.util.Failure(new ParseException(msg))
 	}
 
 }
