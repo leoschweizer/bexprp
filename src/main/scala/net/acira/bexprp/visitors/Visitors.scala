@@ -33,9 +33,15 @@ trait Visitor[R] {
 			visitLiteral(expression.asInstanceOf[Literal])
 			visitConstant(expression.asInstanceOf[Constant])
 		}
-		case Variable(_) => {
+		case FreeVariable(_) => {
 			visitLiteral(expression.asInstanceOf[Literal])
 			visitVariable(expression.asInstanceOf[Variable])
+			visitFreeVariable(expression.asInstanceOf[FreeVariable])
+		}
+		case BoundVariable(_, _) => {
+			visitLiteral(expression.asInstanceOf[Literal])
+			visitVariable(expression.asInstanceOf[Variable])
+			visitBoundVariable(expression.asInstanceOf[BoundVariable])
 		}
 	}
 
@@ -49,6 +55,8 @@ trait Visitor[R] {
 	def visitEquivalence(expression: Equivalence) = this
 	def visitLiteral(expression: Literal) = this
 	def visitVariable(expression: Variable) = this
+	def visitFreeVariable(expression: FreeVariable) = this
+	def visitBoundVariable(expression: BoundVariable) = this
 	def visitConstant(expression: Constant) = this
 
 	def result: R
@@ -68,7 +76,8 @@ trait TraversingVisitor[R] {
 		case Implication(_, _) => visitImplication(expression.asInstanceOf[Implication])
 		case LeftImplication(_, _) => visitLeftImplication(expression.asInstanceOf[LeftImplication])
 		case Equivalence(_, _) => visitEquivalence(expression.asInstanceOf[Equivalence])
-		case Variable(_) => visitVariable(expression.asInstanceOf[Variable])
+		case FreeVariable(_) => visitFreeVariable(expression.asInstanceOf[FreeVariable])
+		case BoundVariable(_, _) => visitBoundVariable(expression.asInstanceOf[BoundVariable])
 		case Constant(_) => visitConstant(expression.asInstanceOf[Constant])
 	}
 
@@ -78,7 +87,8 @@ trait TraversingVisitor[R] {
 	def visitImplication(expression: Implication): R = defaultBinaryOperation(expression)
 	def visitLeftImplication(expression: LeftImplication): R = defaultBinaryOperation(expression)
 	def visitEquivalence(expression: Equivalence): R = defaultBinaryOperation(expression)
-	def visitVariable(expression: Variable): R = defaultLiteralOperation(expression)
+	def visitFreeVariable(expression: FreeVariable): R = defaultLiteralOperation(expression)
+	def visitBoundVariable(expression: BoundVariable): R = defaultLiteralOperation(expression)
 	def visitConstant(expression: Constant): R = defaultLiteralOperation(expression)
 
 }

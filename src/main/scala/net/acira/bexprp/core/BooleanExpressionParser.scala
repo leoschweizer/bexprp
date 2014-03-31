@@ -52,7 +52,7 @@ object BooleanExpressionParser extends StandardTokenParsers {
 	def literal: Parser[Expression] = ident ^^ {
 		case "true" => Constant(true)
 		case "false" => Constant(false)
-		case n => Variable(n)
+		case n => FreeVariable(n)
 	}
 
 	def parse(s: String) = expression(new lexical.Scanner(s)) match {

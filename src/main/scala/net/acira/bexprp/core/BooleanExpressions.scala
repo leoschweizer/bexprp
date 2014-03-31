@@ -1,6 +1,7 @@
 package net.acira.bexprp.core
 
 import net.acira.bexprp.visitors._
+import java.io.PrintStream
 
 trait Expression {
 	def evaluate: Boolean
@@ -8,7 +9,9 @@ trait Expression {
 	def accept[R](visitor: Visitor[R]): Visitor[R]
 
 	def accept[R](visitor: TraversingVisitor[R]): R = visitor.visit(this)
-	def unboundVariables: Set[Variable] = this.accept(new UnboundVariableFinder()).result
+	def unboundVariables: Set[FreeVariable] = this.accept(new UnboundVariableFinder()).result
+	def prettyPrint: Unit = prettyPrint(Console.out)
+	def prettyPrint(on: PrintStream): Unit = on.println(accept(new PrettyPrinter()))
 }
 
 trait Literal extends Expression {
@@ -20,12 +23,18 @@ case class Constant(value: Boolean) extends Literal {
 	override def operationSymbol = value.toString
 }
 
-case class Variable(literal: String) extends Literal {
-	var boundValue: Option[Boolean] = None
-	override def evaluate: Boolean = boundValue.get
-	override def operationSymbol = boundValue.map(_.toString).getOrElse(literal)
-	def bind(value: Boolean): Unit = boundValue = Some(value)
-	def isBound = boundValue.isDefined
+trait Variable extends Literal {
+	def literal: String
+}
+
+case class FreeVariable(literal: String) extends Variable {
+	override def evaluate = ???
+	override def operationSymbol = literal
+}
+
+case class BoundVariable(literal: String, value: Boolean) extends Variable {
+	override def evaluate = value
+	override def operationSymbol = value.toString
 }
 
 trait UnaryOperation extends Expression {

@@ -1,43 +1,24 @@
 package net.acira
 
-import net.acira.bexprp.core.{Expression, Variable, BooleanExpressionParser, Literal}
+import net.acira.bexprp.core._
 import scala.reflect.ClassTag
 import java.io.PrintStream
-import net.acira.bexprp.visitors.PrettyPrinter
+import net.acira.bexprp.visitors.{VariableBinder, PrettyPrinter}
 
 package object bexprp {
 
 	implicit class BexprpString(self: String) {
 
-		def evaluate(literalValues: (String, Boolean)*): Boolean = evaluate(literalValues.map(x => Variable(x._1) -> x._2):_*)
+		def expression: Option[Expression] = BooleanExpressionParser.parse(self)
 
-		def evaluate[X: ClassTag](literalValues: (Literal, Boolean)*): Boolean = {
-			val lv = literalValues.toMap
-			val expression = BooleanExpressionParser.parse(self).get
-			val literals = expression.unboundVariables
-			literals.foreach(literal => {
-				if (lv.contains(literal)) literal.bind(lv(literal))
-			})
-			expression.evaluate
+		def bind(variableBindings: (String, Boolean)*): Expression = bind(variableBindings.map(x => FreeVariable(x._1) -> x._2):_*)
+
+		def bind[X: ClassTag](variableBindings: (Variable, Boolean)*): Expression = {
+			expression.get.accept(new VariableBinder(variableBindings.toMap))
 		}
 
-		def expression: Option[Expression] = {
-			BooleanExpressionParser.parse(self)
-		}
-
-		def truthTable = {
-			val exp = expression.get
-			val unboundVariables = exp.unboundVariables
-			val sortedUnboundVariables = unboundVariables.toList.sortBy(_.literal)
-			val v = List(true, false)
-			val truthValues = v.combinations(sortedUnboundVariables.size)
-			(0 to Math.pow(2, unboundVariables.size).toInt - 1).foreach(x => {
-				println(0 until unboundVariables.size map { pos: Int => (x & (1 << pos)) != 0 })
-			})
-		}
-
-		def prettyPrint: Unit = prettyPrint(Console.out)
-		def prettyPrint(on: PrintStream): Unit = on.println(expression.get.accept(new PrettyPrinter()))
+		def prettyPrint: Unit = expression.get.prettyPrint
+		def prettyPrint(on: PrintStream): Unit = expression.get.prettyPrint(on)
 
 	}
 
