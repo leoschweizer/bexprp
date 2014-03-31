@@ -5,43 +5,43 @@ import net.acira.bexprp.core._
 trait Visitor[R] {
 
 	def visit(expression: Expression): Visitor[R] = expression match {
-		case Not(_) => {
-			visitUnary(expression.asInstanceOf[UnaryOperation])
-			visitNot(expression.asInstanceOf[Not])
+		case e: Not => {
+			visitUnary(e)
+			visitNot(e)
 		}
-		case And(_, _) => {
-			visitBinary(expression.asInstanceOf[BinaryOperation])
-			visitAnd(expression.asInstanceOf[And])
+		case e: And => {
+			visitBinary(e)
+			visitAnd(e)
 		}
-		case Or(_, _) => {
-			visitBinary(expression.asInstanceOf[BinaryOperation])
-			visitOr(expression.asInstanceOf[Or])
+		case e: Or => {
+			visitBinary(e)
+			visitOr(e)
 		}
-		case Implication(_, _) => {
-			visitBinary(expression.asInstanceOf[BinaryOperation])
-			visitImplication(expression.asInstanceOf[Implication])
+		case e: Implication => {
+			visitBinary(e)
+			visitImplication(e)
 		}
-		case LeftImplication(_, _) => {
-			visitBinary(expression.asInstanceOf[BinaryOperation])
-			visitLeftImplication(expression.asInstanceOf[LeftImplication])
+		case e: LeftImplication => {
+			visitBinary(e)
+			visitLeftImplication(e)
 		}
-		case Equivalence(_ , _) => {
-			visitBinary(expression.asInstanceOf[BinaryOperation])
-			visitEquivalence(expression.asInstanceOf[Equivalence])
+		case e: Equivalence => {
+			visitBinary(e)
+			visitEquivalence(e)
 		}
-		case Constant(_) => {
-			visitLiteral(expression.asInstanceOf[Literal])
-			visitConstant(expression.asInstanceOf[Constant])
+		case e: Constant => {
+			visitLiteral(e)
+			visitConstant(e)
 		}
-		case FreeVariable(_) => {
-			visitLiteral(expression.asInstanceOf[Literal])
-			visitVariable(expression.asInstanceOf[Variable])
-			visitFreeVariable(expression.asInstanceOf[FreeVariable])
+		case e: FreeVariable => {
+			visitLiteral(e)
+			visitVariable(e)
+			visitFreeVariable(e)
 		}
-		case BoundVariable(_, _) => {
-			visitLiteral(expression.asInstanceOf[Literal])
-			visitVariable(expression.asInstanceOf[Variable])
-			visitBoundVariable(expression.asInstanceOf[BoundVariable])
+		case e: BoundVariable => {
+			visitLiteral(e)
+			visitVariable(e)
+			visitBoundVariable(e)
 		}
 	}
 
@@ -69,16 +69,16 @@ trait TraversingVisitor[R] {
 	protected def defaultBinaryOperation: (BinaryOperation => R) = ???
 	protected def defaultLiteralOperation: (Literal => R) = ???
 
-	def visit(expression: Expression) = expression match {
-		case Not(_) => visitNot(expression.asInstanceOf[Not])
-		case And(_, _) => visitAnd(expression.asInstanceOf[And])
-		case Or(_, _) => visitOr(expression.asInstanceOf[Or])
-		case Implication(_, _) => visitImplication(expression.asInstanceOf[Implication])
-		case LeftImplication(_, _) => visitLeftImplication(expression.asInstanceOf[LeftImplication])
-		case Equivalence(_, _) => visitEquivalence(expression.asInstanceOf[Equivalence])
-		case FreeVariable(_) => visitFreeVariable(expression.asInstanceOf[FreeVariable])
-		case BoundVariable(_, _) => visitBoundVariable(expression.asInstanceOf[BoundVariable])
-		case Constant(_) => visitConstant(expression.asInstanceOf[Constant])
+	def visit(expression: Expression): R = expression match {
+		case e: Not => visitNot(e)
+		case e: And => visitAnd(e)
+		case e: Or => visitOr(e)
+		case e: Implication => visitImplication(e)
+		case e: LeftImplication => visitLeftImplication(e)
+		case e: Equivalence => visitEquivalence(e)
+		case e: FreeVariable => visitFreeVariable(e)
+		case e: BoundVariable => visitBoundVariable(e)
+		case e: Constant => visitConstant(e)
 	}
 
 	def visitNot(expression: Not): R = defaultUnaryOperation(expression)
