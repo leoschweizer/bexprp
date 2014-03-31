@@ -4,12 +4,9 @@ import net.acira.bexprp.core._
 
 class VariableBinder(variableBindings: Map[Variable, Boolean]) extends TraversingVisitor[Expression] {
 
-	private def bindIfPossible(expression: Expression): Expression = {
-		expression match {
-			case v: FreeVariable => if (variableBindings.contains(v))BoundVariable(v.literal, variableBindings(v)) else v
-			case v: BoundVariable => if (variableBindings.contains(v)) BoundVariable(v.literal, variableBindings(v)) else v
-			case _ => expression.accept(this)
-		}
+	private def bindIfPossible(expression: Expression): Expression = expression match {
+		case v: Variable => if (variableBindings.contains(v))BoundVariable(v.literal, variableBindings(v)) else v
+		case _ => expression.accept(this)
 	}
 
 	override def visitNot(expression: Not) = Not(bindIfPossible(expression.operand))
