@@ -2,6 +2,7 @@ package net.acira.bexprp.core
 
 import net.acira.bexprp.visitors._
 import java.io.PrintStream
+import scala.reflect.ClassTag
 
 trait Expression {
 	def evaluate: Boolean
@@ -9,6 +10,8 @@ trait Expression {
 	def accept[R](visitor: Visitor[R]): Visitor[R]
 
 	def accept[R](visitor: TraversingVisitor[R]): R = visitor.visit(this)
+	def bind(variableBindings: (String, Boolean)*): Expression = bind(variableBindings.map(x => FreeVariable(x._1) -> x._2): _*)
+	def bind[X: ClassTag](variableBindings: (Variable, Boolean)*): Expression = accept(new VariableBinder(variableBindings.toMap))
 	def unboundVariables: Set[FreeVariable] = this.accept(new UnboundVariableFinder()).result
 	def prettyPrint: Unit = prettyPrint(Console.out)
 	def prettyPrint(on: PrintStream): Unit = on.println(accept(new PrettyPrinter()))
